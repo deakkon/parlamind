@@ -80,7 +80,7 @@ public class TF_IDF {
 
         // HashMap<String, Integer> mapWordToIdx = getMapWordToIdx();
         numOfWords = mapWordToIdx.size();
-        System.out.println(numOfWords);
+        // System.out.println(numOfWords);
         int[] docCountVector = new int[numOfWords];
         docLength = new int[docs.size()];
         // lastDocWordVector is auxilary vector keeping track of last doc index
@@ -215,7 +215,7 @@ public class TF_IDF {
             allImportance.add(avgToken);
         }
 
-        System.out.println(topTokenWordToIdx.size());
+        //System.out.println(topTokenWordToIdx.size());
 
         //avg token tfidf value
         avgTokenImportance = allImportance.stream().mapToDouble(val -> val).average().getAsDouble();
@@ -224,7 +224,7 @@ public class TF_IDF {
         topTokenWordToIdx.entrySet().removeIf(
                 matches -> matches.getValue()
                         .compareTo(Double.valueOf(avgTokenImportance)) < 0);
-        System.out.println(topTokenWordToIdx.size());
+        // System.out.println(topTokenWordToIdx.size());
 
         // sort by value, after removing items with tfidf less than avg
         topTokenWordToIdx=topTokenWordToIdx.entrySet()

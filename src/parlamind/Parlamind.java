@@ -30,6 +30,7 @@ public class Parlamind {
             Gson gson = new GsonBuilder().create();
             gson.toJson(calcTopWords, writer);
         }
+        System.out.println("Top tokens stored in data/out/topTokens.json");
 
         //processed emails, use mean of sentence level tfidf values for all token in corpus
         Email[] processedEmails = tfidf.importantSentences(false);
@@ -37,6 +38,7 @@ public class Parlamind {
             Gson gson = new GsonBuilder().create();
             gson.toJson(processedEmails, writer);
         }
+        System.out.println("Processed emails with important senteces calculated via mean of all tokens in sentece stored in data/out/preprocessedEmail_avgSentences.json");
 
         //processed emails, use mean of sentence level tfidf values for top tokens in corpus
         Email[] processedEmailsTopTokens = tfidf.importantSentences(true);
@@ -44,5 +46,6 @@ public class Parlamind {
             Gson gson = new GsonBuilder().create();
             gson.toJson(processedEmailsTopTokens, writer);
         }
+        System.out.println("Processed emails with important senteces calculated via mean of all tokens in sentece stored in data/out/preprocessedEmail_topTokens.json");
     }
 }
