@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="parlamind" default="all">
+  
+  
+  <property file="parlamind.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+    <include name="*.klib"/>
+    <include name="*.swc"/>
+    <include name="*.war"/>
+    <include name="*.zip"/>
+    <include name="*.ane"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/access-bridge-64.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunmscapi.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.com.eduworks:org.json-ld:2.6.4.classpath">
+    <pathelement location="${basedir}/lib/client-runtime-3.3.0.jar"/>
+    <pathelement location="${basedir}/lib/ec.base-2.6.4.jar"/>
+    <pathelement location="${basedir}/lib/html-5.0.bv6.jar"/>
+    <pathelement location="${basedir}/lib/jquery-1.11.3.bv1.jar"/>
+    <pathelement location="${basedir}/lib/jquery-1.11.3.jar"/>
+    <pathelement location="${basedir}/lib/org.json-ld-2.6.4.jar"/>
+    <pathelement location="${basedir}/lib/shared-3.3.0.jar"/>
+  </path>
+  
+  <path id="library.com.github.cb372:scalacache-guava_2.12:0.27.0.classpath">
+    <pathelement location="${basedir}/lib/animal-sniffer-annotations-1.17.jar"/>
+    <pathelement location="${basedir}/lib/checker-qual-2.5.2.jar"/>
+    <pathelement location="${basedir}/lib/error_prone_annotations-2.2.0.jar"/>
+    <pathelement location="${basedir}/lib/failureaccess-1.0.1.jar"/>
+    <pathelement location="${basedir}/lib/guava-27.0.1-jre.jar"/>
+    <pathelement location="${basedir}/lib/j2objc-annotations-1.1.jar"/>
+    <pathelement location="${basedir}/lib/jsr305-3.0.2.jar"/>
+    <pathelement location="${basedir}/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"/>
+    <pathelement location="${basedir}/lib/scala-library-2.12.6.jar"/>
+    <pathelement location="${basedir}/lib/scala-reflect-2.12.6.jar"/>
+    <pathelement location="${basedir}/lib/scalacache-core_2.12-0.27.0.jar"/>
+    <pathelement location="${basedir}/lib/scalacache-guava_2.12-0.27.0.jar"/>
+    <pathelement location="${basedir}/lib/slf4j-api-1.7.25.jar"/>
+  </path>
+  
+  <path id="library.com.google.code.gson:gson:2.8.5.classpath">
+    <pathelement location="${basedir}/lib/gson-2.8.5.jar"/>
+  </path>
+  
+  <path id="library.com.ibm.icu:icu4j:63.1.classpath">
+    <pathelement location="${basedir}/lib/icu4j-63.1.jar"/>
+  </path>
+  
+  <path id="library.edu.stanford.nlp:stanford-corenlp:3.9.2.classpath">
+    <pathelement location="${basedir}/lib/AppleJavaExtensions-1.4.jar"/>
+    <pathelement location="${basedir}/lib/commons-lang3-3.3.1.jar"/>
+    <pathelement location="${basedir}/lib/ejml-0.23.jar"/>
+    <pathelement location="${basedir}/lib/javax.activation-api-1.2.0.jar"/>
+    <pathelement location="${basedir}/lib/javax.json-1.0.4.jar"/>
+    <pathelement location="${basedir}/lib/javax.servlet-api-3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/jaxb-api-2.4.0-b180830.0359.jar"/>
+    <pathelement location="${basedir}/lib/jaxb-core-2.3.0.1.jar"/>
+    <pathelement location="${basedir}/lib/jaxb-impl-2.4.0-b180830.0438.jar"/>
+    <pathelement location="${basedir}/lib/joda-time-2.9.4.jar"/>
+    <pathelement location="${basedir}/lib/jollyday-0.4.9.jar"/>
+    <pathelement location="${basedir}/lib/lucene-analyzers-common-4.10.3.jar"/>
+    <pathelement location="${basedir}/lib/lucene-core-4.10.3.jar"/>
+    <pathelement location="${basedir}/lib/lucene-queries-4.10.3.jar"/>
+    <pathelement location="${basedir}/lib/lucene-queryparser-4.10.3.jar"/>
+    <pathelement location="${basedir}/lib/lucene-sandbox-4.10.3.jar"/>
+    <pathelement location="${basedir}/lib/protobuf-java-3.2.0.jar"/>
+    <pathelement location="${basedir}/lib/slf4j-api-1.7.12.jar"/>
+    <pathelement location="${basedir}/lib/stanford-corenlp-3.9.2.jar"/>
+    <pathelement location="${basedir}/lib/xalan-2.7.0.jar"/>
+    <pathelement location="${basedir}/lib/xercesImpl-2.8.0.jar"/>
+    <pathelement location="${basedir}/lib/xml-apis-1.3.03.jar"/>
+    <pathelement location="${basedir}/lib/xom-1.2.10.jar"/>
+  </path>
+  
+  <path id="library.one.util:streamex:0.6.8.classpath">
+    <pathelement location="${basedir}/lib/streamex-0.6.8.jar"/>
+  </path>
+  
+  <path id="library.org.apache.clerezza.ext:org.json.simple:0.4.classpath">
+    <pathelement location="${basedir}/lib/json-simple-1.1.jar"/>
+    <pathelement location="${basedir}/lib/org.json.simple-0.4.jar"/>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <fileset dir="${javac2.home}">
+      <include name="javac2.jar"/>
+      <include name="jdom.jar"/>
+      <include name="asm-all*.jar"/>
+      <include name="forms-*.jar"/>
+    </fileset>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module parlamind -->
+  
+  <dirname property="module.parlamind.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.parlamind" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.parlamind" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.parlamind" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.parlamind" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="parlamind.output.dir" value="${module.parlamind.basedir}/out/production/parlamind"/>
+  <property name="parlamind.testoutput.dir" value="${module.parlamind.basedir}/out/test/parlamind"/>
+  
+  <path id="parlamind.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="parlamind.module.production.classpath">
+    <path refid="${module.jdk.classpath.parlamind}"/>
+    <path refid="library.com.google.code.gson:gson:2.8.5.classpath"/>
+    <path refid="library.com.eduworks:org.json-ld:2.6.4.classpath"/>
+    <path refid="library.org.apache.clerezza.ext:org.json.simple:0.4.classpath"/>
+    <path refid="library.edu.stanford.nlp:stanford-corenlp:3.9.2.classpath"/>
+    <path refid="library.com.github.cb372:scalacache-guava_2.12:0.27.0.classpath"/>
+    <path refid="library.com.ibm.icu:icu4j:63.1.classpath"/>
+    <path refid="library.one.util:streamex:0.6.8.classpath"/>
+  </path>
+  
+  <path id="parlamind.runtime.production.module.classpath">
+    <pathelement location="${parlamind.output.dir}"/>
+    <path refid="library.com.google.code.gson:gson:2.8.5.classpath"/>
+    <path refid="library.com.eduworks:org.json-ld:2.6.4.classpath"/>
+    <path refid="library.org.apache.clerezza.ext:org.json.simple:0.4.classpath"/>
+    <path refid="library.edu.stanford.nlp:stanford-corenlp:3.9.2.classpath"/>
+    <path refid="library.com.github.cb372:scalacache-guava_2.12:0.27.0.classpath"/>
+    <path refid="library.com.ibm.icu:icu4j:63.1.classpath"/>
+    <path refid="library.one.util:streamex:0.6.8.classpath"/>
+  </path>
+  
+  <path id="parlamind.module.classpath">
+    <path refid="${module.jdk.classpath.parlamind}"/>
+    <pathelement location="${parlamind.output.dir}"/>
+    <path refid="library.com.google.code.gson:gson:2.8.5.classpath"/>
+    <path refid="library.com.eduworks:org.json-ld:2.6.4.classpath"/>
+    <path refid="library.org.apache.clerezza.ext:org.json.simple:0.4.classpath"/>
+    <path refid="library.edu.stanford.nlp:stanford-corenlp:3.9.2.classpath"/>
+    <path refid="library.com.github.cb372:scalacache-guava_2.12:0.27.0.classpath"/>
+    <path refid="library.com.ibm.icu:icu4j:63.1.classpath"/>
+    <path refid="library.one.util:streamex:0.6.8.classpath"/>
+  </path>
+  
+  <path id="parlamind.runtime.module.classpath">
+    <pathelement location="${parlamind.testoutput.dir}"/>
+    <pathelement location="${parlamind.output.dir}"/>
+    <path refid="library.com.google.code.gson:gson:2.8.5.classpath"/>
+    <path refid="library.com.eduworks:org.json-ld:2.6.4.classpath"/>
+    <path refid="library.org.apache.clerezza.ext:org.json.simple:0.4.classpath"/>
+    <path refid="library.edu.stanford.nlp:stanford-corenlp:3.9.2.classpath"/>
+    <path refid="library.com.github.cb372:scalacache-guava_2.12:0.27.0.classpath"/>
+    <path refid="library.com.ibm.icu:icu4j:63.1.classpath"/>
+    <path refid="library.one.util:streamex:0.6.8.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.parlamind">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.parlamind">
+    <patternset refid="excluded.from.module.parlamind"/>
+  </patternset>
+  
+  <path id="parlamind.module.sourcepath">
+    <dirset dir="${module.parlamind.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.parlamind" depends="compile.module.parlamind.production,compile.module.parlamind.tests" description="Compile module parlamind"/>
+  
+  <target name="compile.module.parlamind.production" depends="register.custom.compilers" description="Compile module parlamind; production classes">
+    <mkdir dir="${parlamind.output.dir}"/>
+    <javac2 destdir="${parlamind.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.parlamind}/javac">
+      <compilerarg line="${compiler.args.parlamind}"/>
+      <bootclasspath refid="parlamind.module.bootclasspath"/>
+      <classpath refid="parlamind.module.production.classpath"/>
+      <src refid="parlamind.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.parlamind"/>
+    </javac2>
+    
+    <copy todir="${parlamind.output.dir}">
+      <fileset dir="${module.parlamind.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.parlamind.tests" depends="register.custom.compilers,compile.module.parlamind.production" description="compile module parlamind; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.parlamind" description="cleanup module">
+    <delete dir="${parlamind.output.dir}"/>
+    <delete dir="${parlamind.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.parlamind" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.parlamind" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.parlamind:jar" value="${basedir}/out/artifacts/parlamind_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.parlamind.jar" value="${artifacts.temp.dir}/parlamind.jar"/>
+  </target>
+  
+  <target name="artifact.parlamind:jar" depends="init.artifacts, compile.module.parlamind" description="Build &#39;parlamind:jar&#39; artifact">
+    <property name="artifact.temp.output.parlamind:jar" value="${artifacts.temp.dir}/parlamind_jar"/>
+    <mkdir dir="${artifact.temp.output.parlamind:jar}"/>
+    <jar destfile="${temp.jar.path.parlamind.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${parlamind.output.dir}"/>
+      <zipfileset src="${basedir}/lib/stanford-corenlp-3.9.2.jar"/>
+      <zipfileset src="${basedir}/lib/AppleJavaExtensions-1.4.jar"/>
+      <zipfileset src="${basedir}/lib/jollyday-0.4.9.jar"/>
+      <zipfileset src="${basedir}/lib/commons-lang3-3.3.1.jar"/>
+      <zipfileset src="${basedir}/lib/lucene-queryparser-4.10.3.jar"/>
+      <zipfileset src="${basedir}/lib/lucene-sandbox-4.10.3.jar"/>
+      <zipfileset src="${basedir}/lib/lucene-analyzers-common-4.10.3.jar"/>
+      <zipfileset src="${basedir}/lib/lucene-queries-4.10.3.jar"/>
+      <zipfileset src="${basedir}/lib/lucene-core-4.10.3.jar"/>
+      <zipfileset src="${basedir}/lib/javax.servlet-api-3.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/xom-1.2.10.jar"/>
+      <zipfileset src="${basedir}/lib/xml-apis-1.3.03.jar"/>
+      <zipfileset src="${basedir}/lib/xercesImpl-2.8.0.jar"/>
+      <zipfileset src="${basedir}/lib/xalan-2.7.0.jar"/>
+      <zipfileset src="${basedir}/lib/joda-time-2.9.4.jar"/>
+      <zipfileset src="${basedir}/lib/ejml-0.23.jar"/>
+      <zipfileset src="${basedir}/lib/javax.json-1.0.4.jar"/>
+      <zipfileset src="${basedir}/lib/slf4j-api-1.7.12.jar"/>
+      <zipfileset src="${basedir}/lib/protobuf-java-3.2.0.jar"/>
+      <zipfileset src="${basedir}/lib/javax.activation-api-1.2.0.jar"/>
+      <zipfileset src="${basedir}/lib/jaxb-api-2.4.0-b180830.0359.jar"/>
+      <zipfileset src="${basedir}/lib/jaxb-core-2.3.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/jaxb-impl-2.4.0-b180830.0438.jar"/>
+      <zipfileset src="${basedir}/lib/icu4j-63.1.jar"/>
+      <zipfileset src="${basedir}/lib/gson-2.8.5.jar"/>
+      <zipfileset src="${basedir}/lib/streamex-0.6.8.jar"/>
+      <zipfileset src="${basedir}/lib/org.json-ld-2.6.4.jar"/>
+      <zipfileset src="${basedir}/lib/ec.base-2.6.4.jar"/>
+      <zipfileset src="${basedir}/lib/html-5.0.bv6.jar"/>
+      <zipfileset src="${basedir}/lib/shared-3.3.0.jar"/>
+      <zipfileset src="${basedir}/lib/client-runtime-3.3.0.jar"/>
+      <zipfileset src="${basedir}/lib/jquery-1.11.3.bv1.jar"/>
+      <zipfileset src="${basedir}/lib/jquery-1.11.3.jar"/>
+      <zipfileset src="${basedir}/lib/scalacache-guava_2.12-0.27.0.jar"/>
+      <zipfileset src="${basedir}/lib/scala-library-2.12.6.jar"/>
+      <zipfileset src="${basedir}/lib/scalacache-core_2.12-0.27.0.jar"/>
+      <zipfileset src="${basedir}/lib/scala-reflect-2.12.6.jar"/>
+      <zipfileset src="${basedir}/lib/slf4j-api-1.7.25.jar"/>
+      <zipfileset src="${basedir}/lib/guava-27.0.1-jre.jar"/>
+      <zipfileset src="${basedir}/lib/failureaccess-1.0.1.jar"/>
+      <zipfileset src="${basedir}/lib/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar"/>
+      <zipfileset src="${basedir}/lib/checker-qual-2.5.2.jar"/>
+      <zipfileset src="${basedir}/lib/error_prone_annotations-2.2.0.jar"/>
+      <zipfileset src="${basedir}/lib/j2objc-annotations-1.1.jar"/>
+      <zipfileset src="${basedir}/lib/animal-sniffer-annotations-1.17.jar"/>
+      <zipfileset src="${basedir}/lib/jsr305-3.0.2.jar"/>
+      <zipfileset src="${basedir}/lib/org.json.simple-0.4.jar"/>
+      <zipfileset src="${basedir}/lib/json-simple-1.1.jar"/>
+    </jar>
+    <copy file="${temp.jar.path.parlamind.jar}" tofile="${artifact.temp.output.parlamind:jar}/parlamind.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.parlamind:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.parlamind:jar}"/>
+    <copy todir="${artifact.output.parlamind:jar}">
+      <fileset dir="${artifact.temp.output.parlamind:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>

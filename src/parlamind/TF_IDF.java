@@ -240,7 +240,7 @@ public class TF_IDF {
         Iterator it = topTokenWordToIdx.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
+            // System.out.println(pair.getKey() + " = " + pair.getValue());
             String tmpWord = mapWordToIdx.entrySet().stream()
                     .filter(e -> e.getValue().equals(pair.getKey()))
                     .map(Map.Entry::getKey)
@@ -259,7 +259,7 @@ public class TF_IDF {
                                 Map.Entry::getValue,
                                 (e1, e2) -> e2,
                                 LinkedHashMap::new));
-        System.out.println(topWordScore);
+        // System.out.println(topWordScore);
         return topWordScore;
 
 

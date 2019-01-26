@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.io.*;
 
-public class Main {
+public class Parlamind {
 
     String[] documents = null;
 
