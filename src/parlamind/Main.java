@@ -21,30 +21,28 @@ public class Main {
 
         // DICTIONARIES; WOR TO IDX AND IDX TO WORD
         // USED FOR LOOKUP OF MOST IMPORTANT TOKENS BASED ON TF IDF
-        HashMap<String, Integer> mapWordToIdx = tfidf.getMapWordToIdx();
-        // Map<Integer, String> mapIdxToWord = mapWordToIdx.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+        tfidf.getMapWordToIdx();
 
         // tf idf values for most important terms
         // most important == all tokens with tf-idf > mean(tf-idf)
-        tfidf.importantTermsCorpus(tfidfMatrix);
-
-        //get important senteces in loop, add properties to Email objects
-        tfidf.importantSentences();
-
-        //processed emails
-        Email[] processedEmails = tfidf.importantSentences();
-
-        for (final Email email : processedEmails) {
-            System.out.println(email.Id);
-            System.out.println(email.ExtractedSubject);
-            System.out.println(email.ExtractedBodyText);
-            System.out.println(email.ImportantSentences);
-            System.out.println("---------------------");
+        HashMap<String, Double> calcTopWords = tfidf.importantTermsCorpus(tfidfMatrix);
+        try (Writer writer = new FileWriter("data/out/topTokens.json")) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(calcTopWords, writer);
         }
 
-        try (Writer writer = new FileWriter("preprocessedEmail.json")) {
+        //processed emails, use mean of sentence level tfidf values for all token in corpus
+        Email[] processedEmails = tfidf.importantSentences(false);
+        try (Writer writer = new FileWriter("data/out/preprocessedEmail_avgSentences.json")) {
             Gson gson = new GsonBuilder().create();
             gson.toJson(processedEmails, writer);
+        }
+
+        //processed emails, use mean of sentence level tfidf values for top tokens in corpus
+        Email[] processedEmailsTopTokens = tfidf.importantSentences(true);
+        try (Writer writer = new FileWriter("data/out/preprocessedEmail_topTokens.json")) {
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(processedEmailsTopTokens, writer);
         }
     }
 }

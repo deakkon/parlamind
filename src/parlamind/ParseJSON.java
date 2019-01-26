@@ -14,7 +14,7 @@ public class ParseJSON
     public static Email[] parseJSON() throws Exception
     {
         Gson gson = new Gson();
-        Email[] emails = gson.fromJson(new FileReader("hillary_emails_subset.json"), Email[].class);
+        Email[] emails = gson.fromJson(new FileReader("data/in/hillary_emails_subset.json"), Email[].class);
 
         return emails;
     }

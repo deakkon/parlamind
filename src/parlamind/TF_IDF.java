@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.*;
 import com.ibm.icu.text.BreakIterator;
-import one.util.streamex.*;
 
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -23,8 +22,12 @@ public class TF_IDF {
     double[][] tfMatrix;
     String[] wordVector;
     int docLength[];
-    HashMap<String, Integer> mapWordToIdx;
+
+    HashMap<String, Integer> mapWordToIdx = new HashMap<>();
+    HashMap<Integer, Double> topTokenWordToIdx = new HashMap<>();
+
     Double avgSentenceImportance;
+    Double avgTokenImportance;
 
     public static Set<String> readStopWordsFile() throws FileNotFoundException, IOException {
         String fileStopWords = "stopWords.txt";
@@ -43,7 +46,6 @@ public class TF_IDF {
         return stopWords;
     }
 
-
     public HashMap<String, Integer> tokenize_corpus(ArrayList<String> docs) throws Exception {
         // public void tokenize_corpus(ArrayList<String> docs) throws Exception{
 
@@ -58,7 +60,7 @@ public class TF_IDF {
 
             for (String word : doc.split(" ")) {
                 // System.out.println(word);
-                String tmp_word = word.replaceAll("[^a-zA-Z ]", "").toLowerCase();
+                String tmp_word = word.replaceAll("[^a-zA-Z]", "").toLowerCase();
                 // System.out.println(tmp_word);
                 if (stopWords.contains(tmp_word)) {
                     // System.out.println("Skipped:\t" + tmp_word);
@@ -175,11 +177,19 @@ public class TF_IDF {
         }
     }
 
+    public HashMap<String, Double> importantTermsCorpus(double[][] tfidfMatrix) throws Exception{
 
-    public List<Map.Entry<Integer,Double>> importantTermsCorpus(double[][] tfidfMatrix) throws Exception{
+        /*
+            get most important tokens, based on mean value of mean values of individual tokens
+            values = tfidf scores for the corus tokens
+            returns hasmap with <tokenId, avg_tfidf> with avg_tfidf > mean[tfidf]
+         */
 
-        //map token -> average tf-idf in corpus
-        HashMap<Integer, Double> map = new HashMap<Integer, Double>();
+        //map tokenId -> average tf-idf in corpus
+        HashMap<String, Double> topWordScore = new HashMap<>();
+
+        // avgTfIdf values
+        List<Double> allImportance = new ArrayList<>();
 
         // coprus and feature space size
         int numRows = tfidfMatrix.length;
@@ -200,26 +210,62 @@ public class TF_IDF {
             }
 
             // System.out.println(column_values.stream().mapToDouble(a -> a).average().getAsDouble());
-            map.put(col, column_values.stream().mapToDouble(a -> a).average().getAsDouble());
+            Double avgToken = column_values.stream().mapToDouble(a -> a).average().getAsDouble();
+            topTokenWordToIdx.put(col, avgToken);
+            allImportance.add(avgToken);
         }
 
-        // sort by value in hashmap by key and return all with value above mean of all values -> important tokens in corpora
-        Map<Integer, Double> sortedMap =
-                map.entrySet()
+        System.out.println(topTokenWordToIdx.size());
+
+        //avg token tfidf value
+        avgTokenImportance = allImportance.stream().mapToDouble(val -> val).average().getAsDouble();
+
+        // remove all with value above mean of all values -> important tokens in corpora
+        topTokenWordToIdx.entrySet().removeIf(
+                matches -> matches.getValue()
+                        .compareTo(Double.valueOf(avgTokenImportance)) < 0);
+        System.out.println(topTokenWordToIdx.size());
+
+        // sort by value, after removing items with tfidf less than avg
+        topTokenWordToIdx=topTokenWordToIdx.entrySet()
                         .stream()
                         .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                         .collect(
-                                toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+                                toMap(Map.Entry::getKey,
+                                        Map.Entry::getValue,
+                                        (e1, e2) -> e2,
                                         LinkedHashMap::new));
-        List<Map.Entry<Integer,Double>> firstN =
-                sortedMap.entrySet().stream().limit(10).collect(Collectors.toList());
 
-        // System.out.println(firstN);
-        // System.out.println(firstN.getClass());
-        return firstN;
+        // keep ony words with value > avgTokenImportance
+        Iterator it = topTokenWordToIdx.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            System.out.println(pair.getKey() + " = " + pair.getValue());
+            String tmpWord = mapWordToIdx.entrySet().stream()
+                    .filter(e -> e.getValue().equals(pair.getKey()))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(null);
+
+            topWordScore.put(tmpWord, (Double) pair.getValue());
+
+        }
+
+        topWordScore=topWordScore.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .collect(
+                        toMap(Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (e1, e2) -> e2,
+                                LinkedHashMap::new));
+        System.out.println(topWordScore);
+        return topWordScore;
+
+
     }
 
-    public Email[] importantSentences() throws Exception{
+    public Email[] importantSentences(Boolean useTopTokens) throws Exception{
         //accepts single document
         // splits document in senteces
         // tokenizes senteces
@@ -250,22 +296,22 @@ public class TF_IDF {
                 for (String word : sentence.split(" ")) {
                     String tmp_word = word.replaceAll("[^a-zA-Z ]", "").toLowerCase();
                     if (mapWordToIdx.containsKey(tmp_word)) {
-                        // System.out.println(tmp_word);
                         int wordIdx = mapWordToIdx.get(tmp_word);
-                        // System.out.println(wordIdx);
-                        // System.out.println(tfIdfMatrix[docIdx][wordIdx]);
-                        // sumTfIdf += tfIdfMatrix[docIdx][wordIdx];
-                        intList.add(tfIdfMatrix[docIdx][wordIdx]);
+
+                        if (useTopTokens==true){
+                            if (topTokenWordToIdx.containsKey(wordIdx)){
+                                intList.add(tfIdfMatrix[docIdx][wordIdx]);
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            intList.add(tfIdfMatrix[docIdx][wordIdx]);
+                            }
                         }
                     }
 
                 try{
-/*                    System.out.println(docIdx);
-                    System.out.println(sentence);
-                    System.out.println(intList.size());
-                    System.out.println(intList.stream().mapToDouble(val -> val).average().getAsDouble());
-                    System.out.println("------");*/
-                    if (intList.size()>4) {
+                    if (intList.size()>3) {
                         Double sentImportance = intList.stream().mapToDouble(val -> val).average().getAsDouble();
                         allImportance.add(sentImportance);
                         importantSentences.put(sentence, sentImportance);
@@ -276,7 +322,6 @@ public class TF_IDF {
             }
 
             email.setImportantSentences(importantSentences);
-
             docIdx++;
         }
 
@@ -298,7 +343,6 @@ public class TF_IDF {
         }
 
         return emails;
-
     }
 
     public double[][] getTF_IDFMatrix()  throws Exception{
